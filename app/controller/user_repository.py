@@ -1,8 +1,10 @@
 import logging
 
 from sqlalchemy.orm import Session
-from app.models import User
-from app.schema.user_schema import UserSchema
+from app.model.usager import Usager
+from app.schema.usager_schema import UsagerSchema
+from app.auth.utils import hash_pass
+from fastapi import HTTPException, status
 
 loggers = logging.getLogger(__name__)
 
@@ -13,36 +15,68 @@ def _print(text: str, log_level='info'):
 
 # Get users
 def get_users(db:Session, skipt:int=0, limit:int=100):
-    return db.query(User).offset(skipt).limit(limit).all()
+    return db.query(Usager).offset(skipt).limit(limit).all()
 
 # Get user by id
 def fetch_user_by_id(db:Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+    return db.query(Usager).filter(Usager.id == user_id).first()
+
+# Get user by email
+def fetch_user_by_username(db:Session, username: str):
+    return db.query(Usager).filter(Usager.username == username).first()
 
 # Create user
-def add_user(db:Session, user: UserSchema):
-    _user = User(nom=user.nom, prenom=user.prenom, age=user.age)
+def add_user(db:Session, user: UsagerSchema):
+    _user = Usager(nom=user.nom, 
+                   prenom=user.prenom, 
+                   age=user.age,
+                   username=user.username,
+                   hashed_pwd=hash_pass(user.hashed_pwd),
+                   is_active=user.is_active)
     db.add(_user)
-    db.commit()
-    db.refresh(_user)
-    _print('Utilisateur ajouté avec succès ! ')
+    try:
+        db.commit()
+        db.refresh(_user)
+        _print('Utilisateur ajouté avec succès ! ')
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de l'ajout",
+        )
     return _user
 
 # Create user by id
-def remove_user(db:Session, user: UserSchema):
-    _user = fetch_user_by_id(db, user.id)
-    db.delete(_user)
-    _print('Utilisateur supprimé avec succès ! ')
-    db.commit()
+def remove_user(db:Session, user: UsagerSchema):
+    _user = fetch_user_by_id(db, user)
+
+    try:
+        db.delete(_user)
+        _print('Utilisateur supprimé avec succès ! ')
+        db.commit()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de la supression",
+        )
 
 # Update user by id
-def update_user(db:Session, user_id:int, nom: str, prenom: str, age:int):
+def update_user(db:Session, user_id:int, nom: str, prenom: str, age:int, username:str, hashed_pwd:str, is_active:str):
     _user = fetch_user_by_id(db, user_id)
     _user.nom = nom
     _user.prenom = prenom
     _user.age = age
-    db.commit()
-    _print('Utilisateur modifié avec succès ! ')
-    db.refresh(_user)
+    _user.username = username,
+    _user.hashed_pwd = hashed_pwd,
+    _user.is_active = is_active
+
+    try:
+        db.commit()
+        _print('Utilisateur modifié avec succès ! ')
+        db.refresh(_user)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de la modification",
+        )
     return _user
 
