@@ -14,7 +14,7 @@ class RefreshTokenResponseSchema(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str]
-    token_kind: Optional[TokenData]
+    token_data: Optional[TokenData]
 
 
 class SignUpRequestSchema(BaseModel):

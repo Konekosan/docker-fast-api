@@ -18,8 +18,8 @@ def get_users(db:Session, skipt:int=0, limit:int=100):
     return db.query(Usager).offset(skipt).limit(limit).all()
 
 # Get user by id
-def fetch_user_by_id(db:Session, user_id: int):
-    return db.query(Usager).filter(Usager.id == user_id).first()
+def fetch_user_by_id(db:Session, usager_id: int):
+    return db.query(Usager).filter(Usager.id == usager_id).first()
 
 # Get user by email
 def fetch_user_by_username(db:Session, username: str):
@@ -60,8 +60,8 @@ def remove_user(db:Session, user: UsagerSchema):
         )
 
 # Update user by id
-def update_user(db:Session, user_id:int, nom: str, prenom: str, age:int, username:str, hashed_pwd:str, is_active:str):
-    _user = fetch_user_by_id(db, user_id)
+def update_user(db:Session, usager_id:int, nom: str, prenom: str, age:int, username:str, hashed_pwd:str, is_active:str):
+    _user = fetch_user_by_id(db, usager_id)
     _user.nom = nom
     _user.prenom = prenom
     _user.age = age

@@ -12,7 +12,7 @@ from app.schema.auth_schemas import (
     LoginResponseSchema,
     LoginRequestSchema
 )
-from app.auth.auth import create_access_token, create_refresh_token, get_current_usager
+from app.auth.auth import create_access_token, create_refresh_token, get_current_usager, verify_token
 from app.auth.utils import verify_password
 from app.app_config.database_config import get_db
 
@@ -35,12 +35,27 @@ async def login(payload: LoginRequestSchema, db: Session = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials."
         )
 
-    access_token = create_access_token(data={"user_id": user.id})
-    refresh_token = create_refresh_token(data={"user_id": user.id})
+    access_token = create_access_token(data={"usager_id": user.id})
+    refresh_token = create_refresh_token(data={"usager_id": user.id})
 
     return LoginResponseSchema(
         access_token=access_token, refresh_token=refresh_token, token_type="bearer"
     )
+
+@router.get("/mes")
+async def read_users_me():
+    access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZXJfaWQiOjExLCJleHAiOjE3MTU1OTMyNzAsInRva2VuX2RhdGEiOiJhY2Nlc3NfdG9rZW4ifQ.WKG6wLOFU-8-AB8Of2q9xpm5ugnCrbSN12XOILozne0"
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    user = Depends(get_current_usager)
+    verify_token(access_token, credentials_exception)
+
+    return user
+
 
 # Return current usager if logged
 @router.get("/me")

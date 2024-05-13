@@ -19,7 +19,7 @@ def create_access_token(data: dict):
     expire = datetime.now() + timedelta(minutes=int(JWT_ACCESS_TOKEN_EXPIRE_MINUTES))
 
     to_encode.update(
-        {"exp": int(expire.timestamp()), "token_kind": TokenEnum.AccessToken.value}
+        {"exp": int(expire.timestamp()), "token_data": TokenEnum.AccessToken.value}
     )
 
     return jwt.encode(to_encode, JWT_SECRET_KEY, JWT_ALGORITHM)
@@ -31,7 +31,7 @@ def create_refresh_token(data: dict):
 
     expire = datetime.now() + timedelta(minutes=int(JWT_REFRESH_TOKEN_EXPIRE_MINUTES))
     to_encode.update(
-        {"exp": int(expire.timestamp()), "token_kind": TokenEnum.RefreshToken.value}
+        {"exp": int(expire.timestamp()), "token_data": TokenEnum.RefreshToken.value}
     )
 
     return jwt.encode(to_encode, JWT_SECRET_KEY, JWT_ALGORITHM)
@@ -41,7 +41,7 @@ def verify_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=JWT_ALGORITHM)
 
-        id: str = payload.get("user_id")
+        id: str = payload.get("usager_id")
         if id is None:
             raise credentials_exception
 

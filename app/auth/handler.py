@@ -11,8 +11,6 @@ auth_router = APIRouter()
 
 @auth_router.get("/refresh-token")
 def refresh_token():
-    #access_token = create_access_token(data={"user_id": token_data.id})
-
     return {'message': 'Hello World'}
 
 @auth_router.post("/refresh-token")
@@ -20,23 +18,9 @@ def refresh_token(payload: RefreshTokenRequestSchema, db: Session = Depends(get_
     credentials_exception = HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid Token")
     token_data: TokenData = verify_token(payload.refresh_token, credentials_exception)
 
-    if token_data.token_kind != TokenEnum.RefreshToken:
+    if token_data.token_data != TokenEnum.RefreshToken:
         raise credentials_exception
 
-    access_token = create_access_token(data={"user_id": token_data.id})
-
-    return RefreshTokenResponseSchema(access_token=access_token, token_type="bearer")
-
-
-@auth_router.post("/refresh-tokens")
-def refresh_tokens(payload: RefreshTokenRequestSchema, db: Session = Depends(get_db)):
-    return 1
-    credentials_exception = HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid Token")
-    token_data: TokenData = verify_token(payload.refresh_token, credentials_exception)
-
-    if token_data.token_kind != TokenEnum.RefreshToken:
-        raise credentials_exception
-
-    access_token = create_access_token(data={"user_id": token_data.id})
+    access_token = create_access_token(data={"usager_id": token_data.id})
 
     return RefreshTokenResponseSchema(access_token=access_token, token_type="bearer")
