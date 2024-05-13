@@ -3,7 +3,7 @@ from app.database import engine
 from app.model import usager
 from . import router
 from app.auth import handler
-from app.templates import connection
+from app.webchat import connection
 from fastapi.openapi.utils import get_openapi
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
