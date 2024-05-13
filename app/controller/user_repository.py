@@ -66,7 +66,7 @@ def update_user(db:Session, usager_id:int, nom: str, prenom: str, age:int, usern
     _user.prenom = prenom
     _user.age = age
     _user.username = username,
-    _user.hashed_pwd = hashed_pwd,
+    _user.hashed_pwd = hash_pass(hashed_pwd),
     _user.is_active = is_active
 
     try:

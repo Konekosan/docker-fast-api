@@ -28,16 +28,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  mongo_db:
-    image: mongo
-    container_name: MongoCont
-    restart: always
-    #user: "nfsnobody"
-    ports:
-      - '27017:27017'
-    #volumes:
-    #  - './data:/data/db'
-
   pgadmin:
     image: dpage/pgadmin4
     depends_on:

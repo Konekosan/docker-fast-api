@@ -1,19 +1,10 @@
 from fastapi import FastAPI
-from app.database import engine, SessionLocal
+from app.database import engine
 from app.model import usager
 from . import router
-from app.auth import handler, doc
-from app.templates import chatbox, connection
+from app.auth import handler
+from app.templates import connection
 from fastapi.openapi.utils import get_openapi
-
-#from pymongo.mongo_client import MongoClient
-
-#uri =  'mongodb://localhost:27017/test'
-
-#conn = MongoClient()
-#db = conn.test_db
-
-#collection_name = db['message_collection']
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
 
@@ -43,7 +34,5 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 app.include_router(router.router, prefix='/user', tags=['user'])
-app.include_router(chatbox.chat_router, prefix='/chatbox', tags=['chatbox'])
 app.include_router(handler.auth_router, prefix='/auth', tags=['auth'])
 app.include_router(connection.connection_router, prefix='/connection', tags=['connection'])
-app.include_router(doc.app, prefix='/test_doc', tags=['test_doc'])

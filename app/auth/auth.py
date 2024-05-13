@@ -1,22 +1,21 @@
 from datetime import datetime, timedelta
-from typing import Annotated
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from jose import JWTError, jwt
+from jose import  jwt
 from app.app_config.config import (
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES,
     JWT_SECRET_KEY,
     JWT_ALGORITHM,
     JWT_REFRESH_TOKEN_EXPIRE_MINUTES,
 )
-from app.model.token import  TokenEnum, TokenData, TokenTest
+from app.model.token import  TokenEnum, TokenData
 from app.app_config.database_config import get_db
 from app.model.usager import Usager
 
 auth_router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 # Creation du access token
 def create_access_token(data: dict):
@@ -65,5 +64,4 @@ def get_current_usager(token: str = Depends(oauth2_scheme), db: Session = Depend
     )
     token = verify_token(token, credentials_exception)
     user = db.query(Usager).filter(Usager.id == token.id).first()
-    print(user)
     return user

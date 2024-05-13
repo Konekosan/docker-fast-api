@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.auth.tokens import verify_token, create_access_token
+from app.auth.auth import verify_token, create_access_token
 from app.router import get_db
 from app.model.token import TokenEnum
 from app.schema.auth_schemas import RefreshTokenResponseSchema, RefreshTokenRequestSchema
@@ -8,10 +8,6 @@ from app.schema.auth_schemas import TokenData
 
 
 auth_router = APIRouter()
-
-@auth_router.get("/refresh-token")
-def refresh_token():
-    return {'message': 'Hello World'}
 
 @auth_router.post("/refresh-token")
 def refresh_token(payload: RefreshTokenRequestSchema, db: Session = Depends(get_db)):
