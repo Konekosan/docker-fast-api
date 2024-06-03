@@ -9,8 +9,7 @@ var_user = 'inject_var'
 
 
 @connection_router.get("/")
-async def get(request: Request):
-           
+async def get(request: Request):         
     return templates.TemplateResponse("index.html", {"request": request, "user": var_user})
 
 @connection_router.websocket("/ws")

@@ -13,6 +13,8 @@ services:
       - postgre_db
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    environment:
+      CORS_ORIGINS: http://localhost;http://localhost:4200;http://localhost:8000;
 
   postgre_db:
     image: postgres:latest

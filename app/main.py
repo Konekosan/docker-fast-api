@@ -5,8 +5,24 @@ from . import router
 from app.auth import handler
 from app.webchat import connection
 from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
+from app.view import etablissement_api
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:4200"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
+)
 
 usager.Base.metadata.create_all(bind=engine)
 
@@ -34,5 +50,6 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 app.include_router(router.router, prefix='/user', tags=['user'])
+app.include_router(etablissement_api.etablissement_router, prefix='/etablissement', tags=['etablissement'])
 app.include_router(handler.auth_router, prefix='/auth', tags=['auth'])
 app.include_router(connection.connection_router, prefix='/connection', tags=['connection'])
