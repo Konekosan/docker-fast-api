@@ -16,5 +16,8 @@ async def get(db:Session=Depends(get_db)):
 # Creation d'un usager
 @etablissement_router.post("/create")
 async def create(request: RequestEtablissement, db:Session=Depends(get_db)):
+    print('aaaaa')
+    print(request.parameter)
+    print('aaaaa')
     _user = etablissement_repository.add_etablissement(db, request.parameter)
     return _user, 200

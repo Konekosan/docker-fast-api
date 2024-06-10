@@ -10,4 +10,4 @@ class Etablissement(Base):
     type = Column(String, index=True)
     qualite = Column(String, index=True)
     note = Column(Integer, nullable=False)
-    image = Column(String, default=True)
+    image = Column(String, default='')

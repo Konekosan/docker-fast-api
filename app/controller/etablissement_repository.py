@@ -25,7 +25,7 @@ def add_etablissement(db:Session, etablissement: EtablissementSchema):
                    qualite=etablissement.qualite,
                    note=etablissement.note,
                    image=etablissement.image)
-
+    print(_etablissement)
     db.add(_etablissement)
     try:
         db.commit()

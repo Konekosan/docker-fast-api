@@ -23,6 +23,7 @@ def fetch_user_by_id(db:Session, usager_id: int):
 
 # Get user by email
 def fetch_user_by_username(db:Session, username: str):
+    print('on passe la')
     return db.query(Usager).filter(Usager.username == username).first()
 
 # Create user
