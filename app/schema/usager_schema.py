@@ -1,5 +1,6 @@
-from typing import Optional, TypeVar
+from typing import Optional, TypeVar, List
 from pydantic import BaseModel, Field
+from app.schema.roles_schemas import RoleSchema
 
 class UsagerSchema(BaseModel):
     id: Optional[int]=None
@@ -9,10 +10,10 @@ class UsagerSchema(BaseModel):
     username: Optional[str]=None
     hashed_pwd: Optional[str]=None
     is_active: Optional[bool]=None
+    roles: List[RoleSchema]=[]
 
     class Config:
         orm_mode = True
-
 
 class RequestUser(BaseModel):
     parameter: UsagerSchema = Field(...)

@@ -14,5 +14,12 @@ class EtablissementSchema(BaseModel):
         orm_mode = True
 
 
+class EtablissementAverageNote(BaseModel):
+    nom: str
+    average_note: float
+
+    class Config:
+        orm_mode = True
+
 class RequestEtablissement(BaseModel):
     parameter: EtablissementSchema = Field(...)

@@ -10,8 +10,6 @@ def hash_pass(password: str):
 
 # Methode pour check les mdp hash
 def verify_password(non_hashed_pass, hashed_pass):
-    print(non_hashed_pass)
-    print(hashed_pass)
     password_byte_enc = non_hashed_pass.encode("utf-8")
     hashed_pass = hashed_pass.encode("utf-8")
 

@@ -1,5 +1,6 @@
 from app.database import Base
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 class Burger(Base):
     __tablename__='Burger'
@@ -12,3 +13,4 @@ class Burger(Base):
     qualite = Column(Integer, nullable=False)
     note = Column(Integer, default=True)
     image = Column(String, default=True)
+    review = relationship('Revue', back_populates='revue')

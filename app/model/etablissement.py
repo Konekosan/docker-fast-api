@@ -1,5 +1,6 @@
 from app.database import Base
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import relationship
 
 class Etablissement(Base):
     __tablename__='Etablissement'
@@ -11,3 +12,4 @@ class Etablissement(Base):
     qualite = Column(String, index=True)
     note = Column(Integer, nullable=False)
     image = Column(String, default='')
+    revues = relationship('Revue', back_populates='etablissement')

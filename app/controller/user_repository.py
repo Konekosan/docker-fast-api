@@ -33,7 +33,7 @@ def add_user(db:Session, user: UsagerSchema):
                    age=user.age,
                    username=user.username,
                    hashed_pwd=hash_pass(user.hashed_pwd),
-                   is_active=user.is_active)
+                   is_active=True)
     db.add(_user)
     try:
         db.commit()
@@ -61,14 +61,14 @@ def remove_user(db:Session, user: UsagerSchema):
         )
 
 # Update user by id
-def update_user(db:Session, usager_id:int, nom: str, prenom: str, age:int, username:str, hashed_pwd:str, is_active:str):
+def update_user(db:Session, usager_id:int, nom: str, prenom: str, age:int, username:str, hashed_pwd:str):
     _user = fetch_user_by_id(db, usager_id)
     _user.nom = nom
     _user.prenom = prenom
     _user.age = age
-    _user.username = username,
-    _user.hashed_pwd = hash_pass(hashed_pwd),
-    _user.is_active = is_active
+    _user.username = username
+    _user.hashed_pwd = hash_pass(hashed_pwd)
+    _user.is_active = True
 
     try:
         db.commit()

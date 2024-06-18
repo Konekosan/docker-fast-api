@@ -7,6 +7,8 @@ from app.webchat import connection
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from app.view import etablissement_api
+from app.view import admin_api
+from app.view import review_api
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
 
@@ -53,3 +55,5 @@ app.include_router(router.router, prefix='/user', tags=['user'])
 app.include_router(etablissement_api.etablissement_router, prefix='/etablissement', tags=['etablissement'])
 app.include_router(handler.auth_router, prefix='/auth', tags=['auth'])
 app.include_router(connection.connection_router, prefix='/connection', tags=['connection'])
+app.include_router(admin_api.admin_router, prefix='/admin', tags=['admin'])
+app.include_router(review_api.review_router, prefix='/review', tags=['review'])
